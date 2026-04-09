@@ -44,7 +44,7 @@ dataset = np.column_stack((data['Close'].values, fg_value))
 scaler = MinMaxScaler()
 scaled_data = scaler.fit_transform(dataset)
 
-base_days = 100 # Zaka iya chanza days daga nan
+base_days = 100 
 x = []
 for i in range(base_days, len(scaled_data)):
     x.append(scaled_data[i-base_days:i])
