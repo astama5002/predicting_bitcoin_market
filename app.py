@@ -38,12 +38,16 @@ fg_value = fg.iloc[:, 1].astype(float).values / 100
 fg_value = fg_value[:len(data)]
 if len(fg_value) < len(data):
     fg_value = np.append(fg_value, [0.5] * (len(data) - len(fg_value)))
-
 # ---------------- Prepare input ----------------
 dataset = np.column_stack((data['Close'].values, fg_value))
+
+# This is your proof for the supervisor!
+st.info(f"📊 Total observations in current dataset: {len(dataset)} rows") 
+
 scaler = MinMaxScaler()
 scaled_data = scaler.fit_transform(dataset)
 
+# KEEP ALL OF THIS CODE BELOW - It creates your 100-day sliding window
 base_days = 100 
 x = []
 for i in range(base_days, len(scaled_data)):
