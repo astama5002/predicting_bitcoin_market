@@ -21,7 +21,7 @@ def load_trained_model():
 model = load_trained_model()
 
 # ---------------- User controls ----------------
-years = st.slider("Select years of historical data", 5, 10, 10)
+years = st.slider("Select years of historical data", 2, 10, 5)
 future_days = st.slider("Future prediction days", 7, 60, 30)
 
 # ---------------- Load BTC data ----------------
