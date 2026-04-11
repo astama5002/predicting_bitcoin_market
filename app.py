@@ -30,9 +30,9 @@ data = yf.download("BTC-USD", start_date)
 data = data.reset_index()[['Close']]
 data['Close'] = data['Close'].astype(float)
 
-# ---------------- Load sentiment ----------------
-fg = pd.read_csv("fear_greed.csv")
-fg_value = fg.iloc[:, 1].astype(float).values / 100
+# This 'on_bad_lines' part tells Python to ignore a broken row instead of crashing
+fg = pd.read_csv("fear_greed.csv", on_bad_lines='skip')
+
 
 # Align sentiment length with price
 fg_value = fg_value[:len(data)]
