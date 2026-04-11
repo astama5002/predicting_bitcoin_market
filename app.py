@@ -31,8 +31,8 @@ data = data.reset_index()[['Close']]
 data['Close'] = data['Close'].astype(float)
 
 # ---------------- Load sentiment ----------------
-fg = pd.read_csv("fear_greed.csv")
-fg_value = fg.iloc[:, 1].astype(float).values / 100
+# 'on_bad_lines' skips broken rows so the app doesn't crash
+fg = pd.read_csv("fear_greed.csv", on_bad_lines='skip', engine='python')
 
 # Align sentiment length with price
 fg_value = fg_value[:len(data)]
