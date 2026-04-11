@@ -30,14 +30,25 @@ data = yf.download("BTC-USD", start_date)
 data = data.reset_index()[['Close']]
 data['Close'] = data['Close'].astype(float)
 
-# ---------------- Load sentiment ----------------
-# 'on_bad_lines' skips broken rows so the app doesn't crash
-fg = pd.read_csv("fear_greed.csv", on_bad_lines='skip', engine='python')
+# --- Load sentiment (Lines 33-40) ---
+try:
+    # Use 'on_bad_lines' to ignore broken rows in your CSV
+    fg = pd.read_csv("fear_greed.csv", on_bad_lines='skip')
+    fg_value = fg.iloc[:, 1].astype(float).values / 100
+except Exception as e:
+    # EMERGENCY FALLBACK: If the file is broken, create a neutral dataset (0.5)
+    # This ensures fg_value is ALWAYS defined and the app won't crash
+    st.warning("Sentiment file is currently being updated. Using neutral data.")
+    fg_value = np.array([0.5] * len(data))
 
-# Align sentiment length with price
-fg_value = fg_value[:len(data)]
+# --- Align sentiment length with price ---
+# This ensures fg_value matches your 'data' length exactly
 if len(fg_value) < len(data):
-    fg_value = np.append(fg_value, [0.5] * (len(data) - len(fg_value)))
+    padding = np.array([0.5] * (len(data) - len(fg_value)))
+    fg_value = np.append(fg_value, padding)
+
+fg_value = fg_value[:len(data)]
+
 
 # ---------------- Prepare input ----------------
 dataset = np.column_stack((data['Close'].values, fg_value))
