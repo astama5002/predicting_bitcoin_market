@@ -11,7 +11,7 @@ st.set_page_config(page_title="Crypto Price Prediction", layout="wide")
 st.title("📈 Topic: A machine learning framework for cryptocurrency price prediction with sentiment analysis")
 st.header('''Name: Abdullahi Salisu Lado
 Matric No: CSA/2023/28034\n
-Department: Computer Science & information Technology\n\n''')
+Department: Computer Science & infomation Technology\n\n''')
 
 # ---------------- Load model ----------------
 @st.cache_resource
@@ -21,7 +21,7 @@ def load_trained_model():
 model = load_trained_model()
 
 # ---------------- User controls ----------------
-years = st.slider("Select years of historical data", 2, 10, 5)
+years = st.slider("Select years of historical data", 5, 10, 10)
 future_days = st.slider("Future prediction days", 7, 60, 30)
 
 # ---------------- Load BTC data ----------------
@@ -30,25 +30,21 @@ data = yf.download("BTC-USD", start_date)
 data = data.reset_index()[['Close']]
 data['Close'] = data['Close'].astype(float)
 
-# This 'on_bad_lines' part tells Python to ignore a broken row instead of crashing
-fg = pd.read_csv("fear_greed.csv", on_bad_lines='skip')
-
+# ---------------- Load sentiment ----------------
+fg = pd.read_csv("fear_greed.csv")
+fg_value = fg.iloc[:, 1].astype(float).values / 100
 
 # Align sentiment length with price
 fg_value = fg_value[:len(data)]
 if len(fg_value) < len(data):
     fg_value = np.append(fg_value, [0.5] * (len(data) - len(fg_value)))
+
 # ---------------- Prepare input ----------------
 dataset = np.column_stack((data['Close'].values, fg_value))
-
-# This is your proof for the supervisor!
-st.info(f"📊 Total observations in current dataset: {len(dataset)} rows") 
-
 scaler = MinMaxScaler()
 scaled_data = scaler.fit_transform(dataset)
 
-# KEEP ALL OF THIS CODE BELOW - It creates your 100-day sliding window
-base_days = 100 
+base_days = 100 # Zaka iya chanza days daga nan
 x = []
 for i in range(base_days, len(scaled_data)):
     x.append(scaled_data[i-base_days:i])
