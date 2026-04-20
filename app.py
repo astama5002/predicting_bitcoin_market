@@ -11,7 +11,7 @@ st.set_page_config(page_title="Crypto Price Prediction", layout="wide")
 st.title("📈 Topic: A machine learning framework for cryptocurrency price prediction with sentiment analysis")
 st.header('''Name: Abdullahi Salisu Lado
 Matric No: CSA/2023/28034\n
-Department: Computer Science & infomation Technology\n\n''')
+Department: Computer Science & information Technology\n\n''')
 
 # ---------------- Load model ----------------
 @st.cache_resource
